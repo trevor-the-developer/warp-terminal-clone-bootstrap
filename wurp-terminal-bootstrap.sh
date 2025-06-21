@@ -1,5 +1,5 @@
 #!/bin/bash
-# warp-terminal-bootstrap.sh
+# wurp-terminal-bootstrap.sh
 # Modular bootstrap script for Warp Terminal Clone
 
 set -euo pipefail
@@ -21,21 +21,21 @@ show_help() {
     echo "  -p, --path <path>     Specify base directory for project creation"
     echo "                        (default: current directory)"
     echo "  -n, --name <name>     Specify project folder name"
-    echo "                        (default: warp-terminal)"
+    echo "                        (default: wurp-terminal)"
     echo "  -h, --help           Show this help message"
     echo ""
     echo "Examples:"
     echo "  $0                                    # Create in current directory"
-    echo "  $0 -p ~/Projects                     # Create in ~/Projects/warp-terminal"
+    echo "  $0 -p ~/Projects                     # Create in ~/Projects/wurp-terminal"
     echo "  $0 -p ~/Dev -n my-terminal           # Create in ~/Dev/my-terminal"
-    echo "  $0 --path /opt --name warp-clone     # Create in /opt/warp-clone"
+    echo "  $0 --path /opt --name wurp-clone     # Create in /opt/wurp-clone"
     echo ""
     echo "The script will create the project structure and all necessary files."
 }
 
 # Parse arguments
 PROJECT_BASE_DIR="$DEFAULT_PROJECT_LOCATION"
-PROJECT_NAME="warp-terminal"
+PROJECT_NAME="wurp-terminal"
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -89,10 +89,10 @@ if [ -d "$PROJECT_BASE_DIR/$PROJECT_NAME" ]; then
 fi
 
 # Load configuration from JSON
-CONFIG_FILE="$SCRIPT_DIR/warp-terminal-bootstrap-config.json"
+CONFIG_FILE="$SCRIPT_DIR/wurp-terminal-bootstrap-config.json"
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "❌ Configuration file not found: $CONFIG_FILE"
-    echo "Please ensure warp-terminal-bootstrap-config.json is in the same directory as this script"
+    echo "Please ensure wurp-terminal-bootstrap-config.json is in the same directory as this script"
     exit 1
 fi
 
@@ -100,14 +100,14 @@ fi
 CONFIG=$(cat "$CONFIG_FILE" 2>/dev/null || echo "{}")
 
 # Source the function library
-FUNCTIONS_FILE="$SCRIPT_DIR/lib/warp-terminal-bootstrap-functions.sh"
+FUNCTIONS_FILE="$SCRIPT_DIR/lib/wurp-terminal-bootstrap-functions.sh"
 if [ -f "$FUNCTIONS_FILE" ]; then
     # Set global variables for functions
     export SCRIPT_DIR CONFIG PROJECT_BASE_DIR PROJECT_NAME
     source "$FUNCTIONS_FILE"
 else
     echo "❌ Function library not found: $FUNCTIONS_FILE"
-    echo "Please ensure warp-terminal-bootstrap-functions.sh is in the lib/ directory"
+    echo "Please ensure wurp-terminal-bootstrap-functions.sh is in the lib/ directory"
     echo "Expected location: $FUNCTIONS_FILE"
     exit 1
 fi

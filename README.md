@@ -1,4 +1,4 @@
-# 🚀 Warp Terminal Bootstrap
+# 🚀 Wurp Terminal Bootstrap
 
 A comprehensive bootstrap script that generates a complete AI-powered terminal application built with .NET 8.
 
@@ -6,13 +6,13 @@ A comprehensive bootstrap script that generates a complete AI-powered terminal a
 
 ```bash
 # Create project in current directory
-./bootstrap-warp-terminal.sh
+./bootstrap-wurp-terminal.sh
 
 # Create project in specific location
-./bootstrap-warp-terminal.sh -p ~/workspace -n my-terminal
+./bootstrap-wurp-terminal.sh -p ~/workspace -n my-terminal
 
 # Show help
-./bootstrap-warp-terminal.sh -h
+./bootstrap-wurp-terminal.sh -h
 ```
 
 ## Command Options
@@ -30,12 +30,12 @@ The bootstrap script generates a complete project structure:
 ```
 your-project/
 ├── Program.cs                          # Main terminal application
-├── WarpTerminal.csproj                 # .NET project file
-├── warp-config.json                   # Configuration file
+├── WurpTerminal.csproj                 # .NET project file
+├── wurp-config.json                   # Configuration file
 ├── scripts/
-│   ├── warp-terminal                   # Main launcher script
+│   ├── wurp-terminal                   # Main launcher script
 │   └── lib/
-│       └── warp-terminal-functions.sh # Function library
+│       └── wurp-terminal-functions.sh # Function library
 ├── bin/                                # Build output (after build)
 └── README.md                          # Project documentation
 ```
@@ -46,7 +46,7 @@ The created terminal includes:
 
 - 🤖 **AI Integration** - FreelanceAI compatible commands
 - 📜 **Command History** - Persistent command history
-- 🎨 **Multiple Themes** - Default, dark, and warp themes
+- 🎨 **Multiple Themes** - Default, dark, and wurp themes
 - 🐚 **Shell Integration** - Works with bash/zsh
 - ⚡ **System Commands** - Execute any system command
 - 🔧 **Built-in Commands** - help, clear, history, themes
@@ -59,13 +59,13 @@ Navigate to your project and use the generated build script:
 cd your-project
 
 # Check dependencies
-./scripts/warp-terminal check
+./scripts/wurp-terminal check
 
 # Full installation (build, publish, integrate)
-./scripts/warp-terminal install
+./scripts/wurp-terminal install
 
 # Run the terminal
-warp-terminal
+wurp-terminal
 ```
 
 ## Generated Terminal Commands
@@ -83,7 +83,7 @@ ai debug "permission denied"  # Debug help
 ```bash
 theme                         # Show current theme
 theme dark                    # Switch to dark theme
-theme warp                    # Switch to warp theme
+theme wurp                    # Switch to wurp theme
 ```
 
 ### Built-in Commands
@@ -106,22 +106,22 @@ exit                          # Exit terminal
 | File | Purpose |
 |------|---------|
 | `Program.cs` | Main C# application with AI, themes, history |
-| `warp-config.json` | Centralized configuration |
-| `scripts/warp-terminal` | Build, install, and run script |
-| `scripts/lib/warp-terminal-functions.sh` | Reusable functions |
+| `wurp-config.json` | Centralized configuration |
+| `scripts/wurp-terminal` | Build, install, and run script |
+| `scripts/lib/wurp-terminal-functions.sh` | Reusable functions |
 
 ## Example Usage
 
 ```bash
 # Bootstrap a new terminal project
-./bootstrap-warp-terminal.sh -p ~/Development -n ai-terminal
+./bootstrap-wurp-terminal.sh -p ~/Development -n ai-terminal
 
 # Navigate and install
 cd ~/Development/ai-terminal
-./scripts/warp-terminal install
+./scripts/wurp-terminal install
 
 # Start using your AI terminal
-warp-terminal
+wurp-terminal
 ```
 
 ---

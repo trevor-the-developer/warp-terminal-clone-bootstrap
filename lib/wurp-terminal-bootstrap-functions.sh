@@ -1,6 +1,6 @@
 #!/bin/bash
-# warp-terminal-bootstrap-functions.sh
-# Function library for Warp Terminal Bootstrap
+# wurp-terminal-bootstrap-functions.sh
+# Function library for Wurp Terminal Bootstrap
 
 # Global variables (set by main script)
 SCRIPT_DIR=""
@@ -127,7 +127,7 @@ create_project_structure() {
 # Create .csproj file
 create_csproj_file() {
     local filename=$(get_config '.project_structure.files.csproj')
-    filename="${filename:-WarpTerminal.csproj}"
+    filename="${filename:-WurpTerminal.csproj}"
     
     print_status "file" "Creating $filename..."
     
@@ -139,7 +139,7 @@ create_csproj_file() {
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>warp-terminal</AssemblyName>
+    <AssemblyName>wurp-terminal</AssemblyName>
     <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>false</PublishTrimmed>
     <SelfContained>false</SelfContained>
@@ -163,7 +163,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WarpTerminal;
+namespace WurpTerminal;
 
 class Program
 {
@@ -173,7 +173,7 @@ class Program
         {
             var terminal = new WarpTerminalService();
             
-            Console.WriteLine("🚀 Warp Terminal Clone v1.0");
+            Console.WriteLine("🚀 Wurp (Warp Terminal Clone) v1.0");
             Console.WriteLine("AI-Powered Terminal built with .NET");
             Console.WriteLine("═══════════════════════════════════════\n");
 
@@ -223,11 +223,11 @@ public class WarpTerminalService
                 ShowHelp();
                 break;
             case "version":
-                Console.WriteLine("Warp Terminal Clone v1.0 - .NET 8");
+                Console.WriteLine("Wurp (Warp Terminal Clone) v1.0 - .NET 8");
                 break;
             default:
                 Console.WriteLine($"Unknown command: {command}");
-                Console.WriteLine("Run 'warp-terminal help' for available commands.");
+                Console.WriteLine("Run 'wurp-terminal help' for available commands.");
                 break;
         }
     }
@@ -368,7 +368,7 @@ public class WarpTerminalService
 
     private void ShowHelp()
     {
-        Console.WriteLine("🚀 Warp Terminal Clone - Help");
+        Console.WriteLine("🚀 Wurp (Warp Terminal Clone) - Help");
         Console.WriteLine("═══════════════════════════════════");
         Console.WriteLine();
         Console.WriteLine("Built-in Commands:");
@@ -481,7 +481,7 @@ public class ThemeManager
             ["blue"] = "\x1b[94m",
             ["reset"] = "\x1b[0m"
         },
-        ["warp"] = new()
+        ["wurp"] = new()
         {
             ["prompt"] = "\x1b[96m❯",
             ["red"] = "\x1b[91m",
@@ -527,10 +527,10 @@ public class ThemeManager
 EOF
 }
 
-# Create warp-config.json
+# Create wurp-config.json
 create_warp_config() {
     local filename=$(get_config '.project_structure.files.config')
-    filename="${filename:-warp-config.json}"
+    filename="${filename:-wurp-config.json}"
     
     print_status "gear" "Creating $filename..."
     
@@ -538,10 +538,10 @@ create_warp_config() {
     echo "$CONFIG" | jq '.project_config' | tee "$filename" > /dev/null
 }
 
-# Create function library for warp terminal
+# Create function library for wurp terminal
 create_warp_functions() {
     local filename=$(get_config '.project_structure.files.functions')
-    filename="${filename:-scripts/lib/warp-terminal-functions.sh}"
+    filename="${filename:-scripts/lib/wurp-terminal-functions.sh}"
     
     print_status "wrench" "Creating $filename..."
     
@@ -554,8 +554,8 @@ create_warp_functions() {
     
     cat > "$filename" << 'EOF'
 #!/bin/bash
-# lib/warp-terminal-functions.sh
-# Function library for Warp Terminal Clone
+# lib/wurp-terminal-functions.sh
+# Function library for Wurp (Warp Terminal Clone)
 
 # ========================================
 # UTILITY FUNCTIONS
@@ -688,7 +688,7 @@ publish_app() {
     cd "$PROJECT_ROOT" || return 1
     
     local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-warp-terminal}"
+    binary_name="${binary_name:-wurp-terminal}"
     
     # Publish (let .NET use its default structure)
     local publish_args="-c Release --self-contained false"
@@ -771,7 +771,7 @@ install_shell_integration() {
     local rc_file=$(expand_path "${rc_file_path:-$HOME/.bashrc}")
     
     local marker=$(get_config '.shell_integration.marker')
-    marker="${marker:-# Warp Terminal Integration}"
+    marker="${marker:-# Wurp Terminal Integration}"
     
     if grep -q "$marker" "$rc_file" 2>/dev/null; then
         print_status "info" "Shell integration already installed"
@@ -779,7 +779,7 @@ install_shell_integration() {
     fi
     
     local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-warp-terminal}"
+    binary_name="${binary_name:-wurp-terminal}"
     
     # Build integration block
     local integration_block=""
@@ -847,7 +847,7 @@ create_desktop_entry() {
     local desktop_dir=$(expand_path "${desktop_dir_path:-$HOME/.local/share/applications}")
     
     local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-warp-terminal}"
+    binary_name="${binary_name:-wurp-terminal}"
     
     local desktop_file="$desktop_dir/$binary_name.desktop"
     
@@ -857,7 +857,7 @@ create_desktop_entry() {
     mkdir -p "$desktop_dir"
     
     local entry_name=$(get_config '.desktop_entry.name')
-    entry_name="${entry_name:-Warp Terminal Clone}"
+    entry_name="${entry_name:-Wurp (Warp Terminal Clone)}"
     
     local entry_comment=$(get_config '.desktop_entry.comment')
     entry_comment="${entry_comment:-AI-Powered Terminal built with .NET}"
@@ -894,13 +894,13 @@ DESKTOP_EOF
 
 show_status() {
     local project_name=$(get_config '.project.name')
-    project_name="${project_name:-Warp Terminal Clone}"
+    project_name="${project_name:-Wurp (Warp Terminal Clone)}"
     
     print_color "cyan" "🚀 $project_name Status"
     echo ""
     
     local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-warp-terminal}"
+    binary_name="${binary_name:-wurp-terminal}"
     
     # Use same search logic as publish_app
     local actual_binary=""
@@ -938,7 +938,7 @@ show_status() {
     
     # Check shell integration
     local marker=$(get_config '.shell_integration.marker')
-    marker="${marker:-# Warp Terminal Integration}"
+    marker="${marker:-# Wurp Terminal Integration}"
     
     local current_shell=$(detect_current_shell)
     local rc_file_path=$(get_shell_config "$current_shell" "rc_file")
@@ -962,7 +962,7 @@ show_status() {
 
 run_app() {
     local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-warp-terminal}"
+    binary_name="${binary_name:-wurp-terminal}"
     
     # Use same search logic as publish_app
     local actual_binary=""
@@ -999,12 +999,12 @@ run_app() {
 
 uninstall() {
     local project_name=$(get_config '.project.name')
-    project_name="${project_name:-Warp Terminal Clone}"
+    project_name="${project_name:-Wurp (Warp Terminal Clone)}"
     
     print_status "working" "Uninstalling $project_name..."
     
     local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-warp-terminal}"
+    binary_name="${binary_name:-wurp-terminal}"
     
     local user_bin_path=$(get_config '.paths.user_bin')
     local user_bin=$(expand_path "${user_bin_path:-$HOME/.local/bin}")
@@ -1013,7 +1013,7 @@ uninstall() {
     local desktop_dir=$(expand_path "${desktop_dir_path:-$HOME/.local/share/applications}")
     
     local marker=$(get_config '.shell_integration.marker')
-    marker="${marker:-# Warp Terminal Integration}"
+    marker="${marker:-# Wurp Terminal Integration}"
     
     # Remove symlink
     if [ -L "$user_bin/$binary_name" ]; then
@@ -1034,10 +1034,10 @@ uninstall() {
     local rc_file=$(expand_path "$rc_file_path")
     
     if [ -f "$rc_file" ] && grep -q "$marker" "$rc_file" 2>/dev/null; then
-        cp "$rc_file" "$rc_file.warp.bak"
+        cp "$rc_file" "$rc_file.wurp.bak"
         sed -i "/$marker/,/^$/d" "$rc_file"
         print_status "success" "Shell integration removed"
-        print_color "cyan" "Backup created: $rc_file.warp.bak"
+        print_color "cyan" "Backup created: $rc_file.wurp.bak"
     fi
     
     # Clean build artifacts
@@ -1058,10 +1058,10 @@ uninstall() {
 
 show_help() {
     local project_name=$(get_config '.project.name')
-    project_name="${project_name:-Warp Terminal Clone}"
+    project_name="${project_name:-Wurp (Warp Terminal Clone)}"
     
     local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-warp-terminal}"
+    binary_name="${binary_name:-wurp-terminal}"
     
     print_color "cyan" "$project_name - Build & Installation Script"
     echo ""
@@ -1104,14 +1104,14 @@ EOF
 # Create main launcher script
 create_main_launcher() {
     local filename=$(get_config '.project_structure.files.main_script')
-    filename="${filename:-scripts/warp-terminal}"
+    filename="${filename:-scripts/wurp-terminal}"
     
     print_status "rocket" "Creating $filename..."
     
     cat > "$filename" << 'EOF'
 #!/bin/bash
-# scripts/warp-terminal
-# Main launcher script for Warp Terminal Clone
+# scripts/wurp-terminal
+# Main launcher script for Wurp (Warp Terminal Clone)
 
 set -euo pipefail
 
@@ -1120,7 +1120,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Load configuration from JSON
-CONFIG_FILE="$PROJECT_ROOT/warp-config.json"
+CONFIG_FILE="$PROJECT_ROOT/wurp-config.json"
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "❌ Configuration file not found: $CONFIG_FILE"
     exit 1
@@ -1130,7 +1130,7 @@ fi
 CONFIG=$(cat "$CONFIG_FILE")
 
 # Source the function library
-FUNCTIONS_FILE="$SCRIPT_DIR/lib/warp-terminal-functions.sh"
+FUNCTIONS_FILE="$SCRIPT_DIR/lib/wurp-terminal-functions.sh"
 if [ -f "$FUNCTIONS_FILE" ]; then
     # Set global variables for functions
     export SCRIPT_DIR PROJECT_ROOT CONFIG
@@ -1209,7 +1209,7 @@ create_readme() {
     print_status "book" "Creating $filename..."
     
     local project_name=$(get_config '.project_config.project.name')
-    project_name="${project_name:-Warp Terminal Clone}"
+    project_name="${project_name:-Wurp (Warp Terminal Clone)}"
     
     cat > "$filename" << EOF
 # 🚀 $project_name
@@ -1220,13 +1220,13 @@ A feature-rich terminal emulator built with .NET 8, featuring AI integration, co
 
 \`\`\`bash
 # Check dependencies
-./scripts/warp-terminal check
+./scripts/wurp-terminal check
 
 # Install everything
-./scripts/warp-terminal install
+./scripts/wurp-terminal install
 
 # Run the terminal
-warp-terminal
+wurp-terminal
 \`\`\`
 
 ## Features
@@ -1234,7 +1234,7 @@ warp-terminal
 - 🤖 AI Integration (FreelanceAI compatible)
 - 📜 Command History
 - ⚡ Auto-completion
-- 🎨 Multiple themes (default, dark, warp)
+- 🎨 Multiple themes (default, dark, wurp)
 - 🐚 Multi-shell support (bash/zsh)
 - ⚙️ JSON configuration
 - 🔧 Modular architecture
@@ -1248,7 +1248,7 @@ ai suggest "deploy app"
 ai debug "permission denied"
 
 # Built-in commands
-theme warp
+theme wurp
 clear
 history
 help
@@ -1257,9 +1257,9 @@ help
 ## Project Structure
 
 - \`Program.cs\` - Main terminal application
-- \`warp-config.json\` - Centralized configuration
-- \`scripts/warp-terminal\` - Installation script
-- \`scripts/lib/warp-terminal-functions.sh\` - Function library
+- \`wurp-config.json\` - Centralized configuration
+- \`scripts/wurp-terminal\` - Installation script
+- \`scripts/lib/wurp-terminal-functions.sh\` - Function library
 
 Built with ❤️ using .NET 8
 EOF
@@ -1274,7 +1274,7 @@ execute_bootstrap_with_args() {
     local base_dir="$1"
     local project_name="$2"
     
-    print_color "cyan" "🚀 Creating Warp Terminal Clone Project Structure"
+    print_color "cyan" "🚀 Creating Wurp (Warp Terminal Clone) Project Structure"
     print_color "cyan" "=================================================="
     echo ""
     
@@ -1309,7 +1309,7 @@ execute_bootstrap_with_args() {
     
     create_csproj_file || { print_status "error" "Failed to create .csproj file"; return 1; }
     create_program_cs || { print_status "error" "Failed to create Program.cs"; return 1; }
-    create_warp_config || { print_status "error" "Failed to create warp-config.json"; return 1; }
+    create_warp_config || { print_status "error" "Failed to create wurp-config.json"; return 1; }
     create_warp_functions || { print_status "error" "Failed to create functions library"; return 1; }
     create_main_launcher || { print_status "error" "Failed to create main launcher"; return 1; }
     create_readme || { print_status "error" "Failed to create README.md"; return 1; }
@@ -1319,8 +1319,8 @@ execute_bootstrap_with_args() {
     local functions_script=$(get_config '.project_structure.files.functions')
     
     # Use defaults if config is empty
-    main_script="${main_script:-scripts/warp-terminal}"
-    functions_script="${functions_script:-scripts/lib/warp-terminal-functions.sh}"
+    main_script="${main_script:-scripts/wurp-terminal}"
+    functions_script="${functions_script:-scripts/lib/wurp-terminal-functions.sh}"
     
     if [ -f "$main_script" ]; then
         chmod +x "$main_script"
@@ -1334,22 +1334,22 @@ execute_bootstrap_with_args() {
     
     # Final status
     echo ""
-    print_status "party" "Warp Terminal project structure created successfully!"
+    print_status "party" "Wurp Terminal project structure created successfully!"
     echo ""
     print_status "folder" "Project location: $project_dir"
     echo ""
     print_status "rocket" "Next steps:"
     echo "   cd \"$project_dir\""
-    echo "   ./scripts/warp-terminal check    # Check dependencies"
-    echo "   ./scripts/warp-terminal install  # Build and install"
-    echo "   warp-terminal                    # Run the terminal"
+    echo "   ./scripts/wurp-terminal check    # Check dependencies"
+    echo "   ./scripts/wurp-terminal install  # Build and install"
+    echo "   wurp-terminal                    # Run the terminal"
     echo ""
     print_status "success" "All files created:"
     echo "   ├── Program.cs (Enhanced terminal with AI, themes, history)"
-    echo "   ├── WarpTerminal.csproj"
-    echo "   ├── warp-config.json (Complete configuration)"
-    echo "   ├── scripts/warp-terminal (Main launcher)"
-    echo "   ├── scripts/lib/warp-terminal-functions.sh (Complete library)"
+    echo "   ├── WurpTerminal.csproj"
+    echo "   ├── wurp-config.json (Complete configuration)"
+    echo "   ├── scripts/wurp-terminal (Main launcher)"
+    echo "   ├── scripts/lib/wurp-terminal-functions.sh (Complete library)"
     echo "   └── README.md"
     echo ""
     print_status "target" "The project is ready for testing!"
@@ -1369,7 +1369,7 @@ execute_bootstrap() {
     fi
     
     if [ -z "$project_subdir" ]; then
-        project_subdir="warp-terminal"
+        project_subdir="wurp-terminal"
     fi
     
     # Expand the base directory first

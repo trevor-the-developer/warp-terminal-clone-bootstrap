@@ -5,11 +5,11 @@
       "scripts/lib"
     ],
     "files": {
-      "csproj": "WarpTerminal.csproj",
+      "csproj": "WurpTerminal.csproj",
       "main": "Program.cs",
-      "config": "warp-config.json",
-      "functions": "scripts/lib/warp-terminal-functions.sh",
-      "main_script": "scripts/warp-terminal",
+      "config": "wurp-config.json",
+      "functions": "scripts/lib/wurp-terminal-functions.sh",
+      "main_script": "scripts/wurp-terminal",
       "readme": "README.md"
     }
   },
@@ -44,7 +44,7 @@
       "name": "Warp Terminal Clone",
       "description": "AI-Powered Terminal built with .NET 8",
       "version": "1.0.0",
-      "binary_name": "warp-terminal"
+      "binary_name": "wurp-terminal"
     },
     "dependencies": {
       "required": [
@@ -101,13 +101,13 @@
         }
       },
       "aliases": [
-        "alias wt='warp-terminal'",
-        "alias warp='warp-terminal'"
+        "alias wt='wurp-terminal'",
+        "alias wurp='wurp-terminal'"
       ],
       "quick_aliases": [
-        "alias explain='warp-terminal ai explain'",
-        "alias suggest='warp-terminal ai suggest'",
-        "alias debug='warp-terminal ai debug'"
+        "alias explain='wurp-terminal ai explain'",
+        "alias suggest='wurp-terminal ai suggest'",
+        "alias debug='wurp-terminal ai debug'"
       ]
     },
     "services": {
