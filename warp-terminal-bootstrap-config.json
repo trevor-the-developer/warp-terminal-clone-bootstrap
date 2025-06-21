@@ -1,0 +1,131 @@
+{
+  "project_structure": {
+    "directories": [
+      "scripts",
+      "scripts/lib"
+    ],
+    "files": {
+      "csproj": "WarpTerminal.csproj",
+      "main": "Program.cs",
+      "config": "warp-config.json",
+      "functions": "scripts/lib/warp-terminal-functions.sh",
+      "main_script": "scripts/warp-terminal",
+      "readme": "README.md"
+    }
+  },
+  "status": {
+    "colors": {
+      "red": "\033[0;31m",
+      "green": "\033[0;32m",
+      "yellow": "\033[1;33m",
+      "blue": "\033[0;34m",
+      "cyan": "\033[0;36m",
+      "nc": "\033[0m"
+    },
+    "emojis": {
+      "success": "✅",
+      "error": "❌",
+      "warning": "⚠️",
+      "info": "ℹ️",
+      "working": "🔨",
+      "folder": "📁",
+      "file": "📝",
+      "computer": "💻",
+      "gear": "⚙️",
+      "wrench": "🔧",
+      "book": "📖",
+      "rocket": "🚀",
+      "party": "🎉",
+      "target": "🎯"
+    }
+  },
+  "project_config": {
+    "project": {
+      "name": "Warp Terminal Clone",
+      "description": "AI-Powered Terminal built with .NET 8",
+      "version": "1.0.0",
+      "binary_name": "warp-terminal"
+    },
+    "dependencies": {
+      "required": [
+        {
+          "name": ".NET 8 SDK",
+          "command": "dotnet",
+          "install_hint": "Install from https://dotnet.microsoft.com/download"
+        },
+        {
+          "name": "jq",
+          "command": "jq",
+          "install_hint": "sudo apt install jq (Ubuntu) or brew install jq (macOS)"
+        },
+        {
+          "name": "curl",
+          "command": "curl",
+          "install_hint": "sudo apt install curl (Ubuntu) or brew install curl (macOS)"
+        }
+      ],
+      "optional": [
+        {
+          "name": "FreelanceAI",
+          "description": "AI API service for enhanced responses"
+        },
+        {
+          "name": "Ollama",
+          "description": "Local AI model runner"
+        }
+      ]
+    },
+    "build": {
+      "dotnet_args": {
+        "build": "-c Release",
+        "publish": "-c Release --self-contained false"
+      },
+      "clean_dirs": [
+        "bin",
+        "obj"
+      ]
+    },
+    "paths": {
+      "publish_dir": "bin/Release/net8.0/publish",
+      "user_bin": "$HOME/.local/bin",
+      "desktop_dir": "$HOME/.local/share/applications"
+    },
+    "shell_integration": {
+      "marker": "# Warp Terminal Integration",
+      "shells": {
+        "bash": {
+          "rc_file": "$HOME/.bashrc"
+        },
+        "zsh": {
+          "rc_file": "$HOME/.zshrc"
+        }
+      },
+      "aliases": [
+        "alias wt='warp-terminal'",
+        "alias warp='warp-terminal'"
+      ],
+      "quick_aliases": [
+        "alias explain='warp-terminal ai explain'",
+        "alias suggest='warp-terminal ai suggest'",
+        "alias debug='warp-terminal ai debug'"
+      ]
+    },
+    "services": {
+      "freelance_ai": {
+        "health_url": "http://localhost:5000/health",
+        "description": "FreelanceAI API service"
+      },
+      "ollama": {
+        "health_url": "http://localhost:11434/api/tags",
+        "description": "Ollama local AI service"
+      }
+    },
+    "desktop_entry": {
+      "name": "Warp Terminal Clone",
+      "comment": "AI-Powered Terminal built with .NET",
+      "icon": "utilities-terminal",
+      "categories": "System;TerminalEmulator;",
+      "keywords": "terminal;console;command;shell;ai;"
+    }
+  }
+}
