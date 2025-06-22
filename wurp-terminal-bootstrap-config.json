@@ -2,7 +2,8 @@
   "project_structure": {
     "directories": [
       "scripts",
-      "scripts/lib"
+      "scripts/lib",
+      "Core"
     ],
     "files": {
       "csproj": "WurpTerminal.csproj",
@@ -15,12 +16,12 @@
   },
   "status": {
     "colors": {
-      "red": "\033[0;31m",
-      "green": "\033[0;32m",
-      "yellow": "\033[1;33m",
-      "blue": "\033[0;34m",
-      "cyan": "\033[0;36m",
-      "nc": "\033[0m"
+      "red": "\\033[0;31m",
+      "green": "\\033[0;32m",
+      "yellow": "\\033[1;33m",
+      "blue": "\\033[0;34m",
+      "cyan": "\\033[0;36m",
+      "nc": "\\033[0m"
     },
     "emojis": {
       "success": "✅",
@@ -39,9 +40,13 @@
       "target": "🎯"
     }
   },
+  "bootstrap": {
+    "base_dir": "$HOME/Development",
+    "project_subdir": "wurp-terminal"
+  },
   "project_config": {
     "project": {
-      "name": "Warp Terminal Clone",
+      "name": "Wurp (Warp Terminal Clone)",
       "description": "AI-Powered Terminal built with .NET 8",
       "version": "1.0.0",
       "binary_name": "wurp-terminal"
@@ -91,7 +96,7 @@
       "desktop_dir": "$HOME/.local/share/applications"
     },
     "shell_integration": {
-      "marker": "# Warp Terminal Integration",
+      "marker": "# Wurp Terminal Integration",
       "shells": {
         "bash": {
           "rc_file": "$HOME/.bashrc"
@@ -112,8 +117,27 @@
     },
     "services": {
       "freelance_ai": {
+        "base_url": "http://localhost:5000",
         "health_url": "http://localhost:5000/health",
-        "description": "FreelanceAI API service"
+        "api_endpoints": {
+          "generate": "/api/ai/generate",
+          "status": "/api/ai/status",
+          "spend": "/api/ai/spend",
+          "health": "/api/ai/health",
+          "history": "/api/ai/history",
+          "rollover": "/api/ai/rollover",
+          "swagger": "/swagger"
+        },
+        "description": "FreelanceAI Smart AI Router with intelligent provider selection",
+        "features": [
+          "Smart provider routing (Groq, Ollama)",
+          "Cost optimization and tracking",
+          "Response history analytics",
+          "Health monitoring",
+          "Automatic failover",
+          "Rate limiting",
+          "Budget management"
+        ]
       },
       "ollama": {
         "health_url": "http://localhost:11434/api/tags",
@@ -121,7 +145,7 @@
       }
     },
     "desktop_entry": {
-      "name": "Warp Terminal Clone",
+      "name": "Wurp (Warp Terminal Clone)",
       "comment": "AI-Powered Terminal built with .NET",
       "icon": "utilities-terminal",
       "categories": "System;TerminalEmulator;",
