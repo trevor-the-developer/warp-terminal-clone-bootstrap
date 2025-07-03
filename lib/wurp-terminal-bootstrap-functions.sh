@@ -40,20 +40,33 @@ load_modules() {
 
     local loaded_count=0
     local failed_modules=()
+    local module_files=()
 
-    # Source all modules in order (00-*, 10-*, etc.)
+    # Check if any module files exist
     for module in "$MODULES_DIR"/*.sh; do
         if [ -f "$module" ]; then
-            local module_name=$(basename "$module")
-            debug_print "Loading module: $module_name"
+            module_files+=("$module")
+        fi
+    done
 
-            if source "$module"; then
-                debug_print "✅ Successfully loaded: $module_name"
-                ((loaded_count++))
-            else
-                echo "❌ Failed to load module: $module_name"
-                failed_modules+=("$module_name")
-            fi
+    # If no modules found, that's fine - we'll use legacy functions
+    if [ ${#module_files[@]} -eq 0 ]; then
+        debug_print "No modules found, using built-in legacy functions"
+        print_status "success" "Modular system loaded successfully"
+        return 0
+    fi
+
+    # Source all modules in order (00-*, 10-*, etc.)
+    for module in "${module_files[@]}"; do
+        local module_name=$(basename "$module")
+        debug_print "Loading module: $module_name"
+
+        if source "$module"; then
+            debug_print "✅ Successfully loaded: $module_name"
+            ((loaded_count++))
+        else
+            echo "❌ Failed to load module: $module_name"
+            failed_modules+=("$module_name")
         fi
     done
 
@@ -64,7 +77,7 @@ load_modules() {
         return 1
     fi
 
-    echo "✅ Modular system loaded successfully"
+    print_status "success" "Modular system loaded successfully"
     return 0
 }
 
@@ -792,180 +805,91 @@ create_wurp_functions() {
         print_status "info" "Created directory: $dir_path"
     fi
 
-    # Copy the functions we created in 20-files.sh module
-    cat > "$filename" << 'FUNCTIONS_EOF'
+    # Copy our complete modular function library to the generated project
+    local bootstrap_functions="$SCRIPT_DIR/lib/wurp-terminal-bootstrap-functions.sh"
+    
+    if [ -f "$bootstrap_functions" ]; then
+        # Extract the template from our main functions file
+        print_status "info" "Copying complete modular system"
+        # We'll create the complete modular function library
+        # Copy our complete modular system to the generated project
+        cp "$SCRIPT_DIR/lib/wurp-terminal-bootstrap-functions.sh" "$filename"
+        
+        # Update paths and context for the generated project
+        sed -i 's|lib/wurp-terminal-bootstrap-functions.sh|lib/wurp-terminal-functions.sh|g' "$filename"
+        sed -i 's|# Modular coordinator for Wurp Terminal Bootstrap|# Modular function library for Wurp (Warp Terminal Clone)|g' "$filename"
+        sed -i 's|Bootstrap coordinator:|Generated project:|g' "$filename"
+        
+        print_status "success" "Complete modular system copied to generated project"
+    else
+        print_status "warning" "Bootstrap functions not found, creating simplified version"
+        # Create a simplified functions library as fallback
+        cat > "$filename" << 'SIMPLE_EOF'
 #!/bin/bash
 # lib/wurp-terminal-functions.sh
-# Function library for Wurp (Warp Terminal Clone)
+# Modular function library for Wurp (Warp Terminal Clone)
 
-# Legacy compatibility until full modular migration
+# Basic functions for generated project
 get_config() {
     local path=$1
     echo "$CONFIG" | jq -r "$path // empty" 2>/dev/null
-}
-
-expand_path() {
-    local path=$1
-    echo "${path/\$HOME/$HOME}"
-}
-
-print_color() {
-    local color_name=$1
-    local message=$2
-    case $color_name in
-        "red") echo -e "\033[0;31m${message}\033[0m" ;;
-        "green") echo -e "\033[0;32m${message}\033[0m" ;;
-        "yellow") echo -e "\033[1;33m${message}\033[0m" ;;
-        "blue") echo -e "\033[0;34m${message}\033[0m" ;;
-        "cyan") echo -e "\033[0;36m${message}\033[0m" ;;
-        *) echo "$message" ;;
-    esac
 }
 
 print_status() {
     local status=$1
     local message=$2
     case $status in
-        "success") print_color "green" "✅ $message" ;;
-        "error") print_color "red" "❌ $message" ;;
-        "warning") print_color "yellow" "⚠️  $message" ;;
-        "info") print_color "cyan" "ℹ️  $message" ;;
-        "working") print_color "yellow" "🔨 $message" ;;
+        "success") echo -e "\033[0;32m✅ $message\033[0m" ;;
+        "error") echo -e "\033[0;31m❌ $message\033[0m" ;;
+        "warning") echo -e "\033[1;33m⚠️  $message\033[0m" ;;
+        "info") echo -e "\033[0;36mℹ️  $message\033[0m" ;;
+        "working") echo -e "\033[1;33m🔨 $message\033[0m" ;;
         *) echo "$message" ;;
     esac
 }
 
-# Basic dependency check
 check_dependencies() {
     print_status "working" "Checking dependencies..."
-    local missing_deps=()
-    local has_errors=false
-
-    if ! command -v dotnet &> /dev/null; then
-        missing_deps+=(".NET 8 SDK: Install from https://dotnet.microsoft.com/download")
-        has_errors=true
-    fi
-
-    if ! command -v jq &> /dev/null; then
-        missing_deps+=("jq: sudo apt install jq (Ubuntu) or brew install jq (macOS)")
-        has_errors=true
-    fi
-
-    if [ "$has_errors" = true ]; then
-        print_status "error" "Missing dependencies:"
-        for dep in "${missing_deps[@]}"; do
-            print_color "yellow" "  • $dep"
-        done
-        return 1
-    fi
-
+    command -v dotnet >/dev/null 2>&1 || { print_status "error" "dotnet not found"; return 1; }
+    command -v jq >/dev/null 2>&1 || { print_status "error" "jq not found"; return 1; }
     print_status "success" "All dependencies satisfied"
-    return 0
 }
 
-# Basic build function
 build_app() {
     print_status "working" "Building application..."
-    cd "$PROJECT_ROOT" || return 1
-
-    if dotnet build -c Release; then
-        print_status "success" "Build successful"
-        return 0
-    else
-        print_status "error" "Build failed"
-        return 1
-    fi
+    dotnet build -c Release && print_status "success" "Build successful"
 }
 
-# Basic publish function
 publish_app() {
     print_status "working" "Publishing application..."
-    cd "$PROJECT_ROOT" || return 1
-
-    if dotnet publish -c Release --self-contained false; then
-        print_status "success" "Publish successful"
-        return 0
-    else
-        print_status "error" "Publish failed"
-        return 1
-    fi
+    dotnet publish -c Release --self-contained false && print_status "success" "Publish successful"
 }
 
-# Basic run function
 run_app() {
     local binary_name="wurp-terminal"
-    local search_paths=(
-        "bin/Release/net9.0/linux-x64/publish/$binary_name"
-        "bin/Release/net9.0/publish/$binary_name"
-        "bin/Release/net9.0/linux-x64/$binary_name"
-        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
-        "bin/Release/net9.0/publish/$binary_name.dll"
-    )
-
-    for path in "${search_paths[@]}"; do
+    for path in "bin/Release/net9.0/linux-x64/publish/$binary_name" "bin/Release/net9.0/publish/$binary_name.dll"; do
         if [ -f "$PROJECT_ROOT/$path" ]; then
             if [[ "$path" == *.dll ]]; then
                 exec dotnet "$PROJECT_ROOT/$path" "$@"
             else
                 exec "$PROJECT_ROOT/$path" "$@"
             fi
-            return 0
         fi
     done
-
     print_status "error" "Application not found. Please build first."
-    return 1
 }
 
-# Basic status function
 show_status() {
-    print_color "cyan" "🚀 Wurp Terminal Status"
-    echo ""
-
-    if [ -f "$PROJECT_ROOT/bin/Release/net8.0/publish/wurp-terminal" ] || [ -f "$PROJECT_ROOT/bin/Release/net8.0/publish/wurp-terminal.dll" ]; then
-        print_status "success" "Application built and published"
-    else
-        print_status "error" "Application not built"
-    fi
+    echo "🚀 Wurp Terminal Status"
+    [ -f "bin/Release/net9.0/linux-x64/publish/wurp-terminal" ] && print_status "success" "Application built" || print_status "error" "Application not built"
 }
 
-# Basic help function
 show_help() {
-    print_color "cyan" "Wurp (Warp Terminal Clone) - Build & Installation Script"
-    echo ""
-    print_color "yellow" "Usage:"
-    echo "  ./scripts/wurp-terminal [command] [options]"
-    echo ""
-    print_color "yellow" "Commands:"
-    echo "  build         - Build the application"
-    echo "  publish       - Build and publish"
-    echo "  run           - Run the application"
-    echo "  status        - Show installation status"
-    echo "  check         - Check dependencies"
-    echo "  help          - Show this help"
+    echo "Wurp (Warp Terminal Clone) - Build & Installation Script"
+    echo "Commands: build, publish, run, status, check, help"
 }
-
-# Stub functions (to be implemented in future modules)
-install_shell_integration() {
-    print_status "info" "Shell integration not yet implemented"
-}
-
-create_desktop_entry() {
-    print_status "info" "Desktop integration not yet implemented"
-}
-
-check_freelance_ai() {
-    print_status "info" "Service checks not yet implemented"
-}
-
-check_ollama() {
-    print_status "info" "Service checks not yet implemented"
-}
-
-uninstall() {
-    print_status "info" "Uninstall not yet implemented"
-}
-FUNCTIONS_EOF
+SIMPLE_EOF
+    fi
 
     chmod +x "$filename"
 }

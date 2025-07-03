@@ -18,7 +18,7 @@ create_csproj_file() {
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>wurp-terminal</AssemblyName>
@@ -131,7 +131,7 @@ public class WurpTerminalService
                 ShowHelp();
                 break;
             case "version":
-                Console.WriteLine("Wurp (Warp Terminal Clone) v1.0 - .NET 8");
+                Console.WriteLine("Wurp (Warp Terminal Clone) v1.0 - .NET 9");
                 break;
             default:
                 Console.WriteLine($"Unknown command: {command}");
@@ -657,7 +657,7 @@ create_readme() {
     cat > "$filename" << 'README_EOF'
 # 🚀 Wurp (Warp Terminal Clone)
 
-A feature-rich terminal emulator built with .NET 8, featuring AI integration, command history, auto-completion, and themes.
+A feature-rich terminal emulator built with .NET 9, featuring AI integration, command history, auto-completion, and themes.
 
 ## Quick Start
 
@@ -830,7 +830,7 @@ The `wurp-config.json` file contains all settings:
 ### Common Issues
 1. **AI commands not working**: Ensure FreelanceAI is running on port 5000
 2. **Theme not changing**: Try using the full command: `theme <name>`
-3. **Build fails**: Check that .NET 8 SDK is properly installed
+3. **Build fails**: Check that .NET 9 SDK is properly installed
 
 ### Debug Commands
 ```bash
@@ -846,7 +846,7 @@ curl http://localhost:5000/health
 
 ---
 
-**Built with ❤️ using .NET 8 and FreelanceAI**
+**Built with ❤️ using .NET 9 and FreelanceAI**
 
 *Experience the future of terminal interaction with AI-powered assistance and intelligent routing.*
 README_EOF
@@ -1068,11 +1068,11 @@ publish_app() {
         # Find the actual binary location
         local actual_binary=""
         local search_paths=(
-            "bin/Release/net8.0/linux-x64/publish/$binary_name"
-            "bin/Release/net8.0/publish/$binary_name"
-            "bin/Release/net8.0/linux-x64/$binary_name"
-            "bin/Release/net8.0/linux-x64/publish/$binary_name.dll"
-            "bin/Release/net8.0/publish/$binary_name.dll"
+            "bin/Release/net9.0/linux-x64/publish/$binary_name"
+            "bin/Release/net9.0/publish/$binary_name"
+            "bin/Release/net9.0/linux-x64/$binary_name"
+            "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
+            "bin/Release/net9.0/publish/$binary_name.dll"
         )
 
         for path in "${search_paths[@]}"; do
@@ -1127,11 +1127,11 @@ run_app() {
     # Try to find the published binary
     local actual_binary=""
     local search_paths=(
-        "bin/Release/net8.0/linux-x64/publish/$binary_name"
-        "bin/Release/net8.0/publish/$binary_name"
-        "bin/Release/net8.0/linux-x64/$binary_name"
-        "bin/Release/net8.0/linux-x64/publish/$binary_name.dll"
-        "bin/Release/net8.0/publish/$binary_name.dll"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name"
+        "bin/Release/net9.0/publish/$binary_name"
+        "bin/Release/net9.0/linux-x64/$binary_name"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
+        "bin/Release/net9.0/publish/$binary_name.dll"
     )
 
     for path in "${search_paths[@]}"; do
@@ -1167,11 +1167,11 @@ show_status() {
     # Check if application is built
     local actual_binary=""
     local search_paths=(
-        "bin/Release/net8.0/linux-x64/publish/$binary_name"
-        "bin/Release/net8.0/publish/$binary_name"
-        "bin/Release/net8.0/linux-x64/$binary_name"
-        "bin/Release/net8.0/linux-x64/publish/$binary_name.dll"
-        "bin/Release/net8.0/publish/$binary_name.dll"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name"
+        "bin/Release/net9.0/publish/$binary_name"
+        "bin/Release/net9.0/linux-x64/$binary_name"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
+        "bin/Release/net9.0/publish/$binary_name.dll"
     )
 
     for path in "${search_paths[@]}"; do

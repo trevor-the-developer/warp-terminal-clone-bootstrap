@@ -48,14 +48,14 @@
   "project_config": {
     "project": {
       "name": "Wurp (Warp Terminal Clone)",
-      "description": "AI-Powered Terminal built with .NET 8",
+      "description": "AI-Powered Terminal built with .NET 9",
       "version": "1.0.0",
       "binary_name": "wurp-terminal"
     },
     "dependencies": {
       "required": [
         {
-          "name": ".NET 8 SDK",
+          "name": ".NET 9 SDK",
           "command": "dotnet",
           "install_hint": "Install from https://dotnet.microsoft.com/download"
         },
@@ -92,7 +92,7 @@
       ]
     },
     "paths": {
-      "publish_dir": "bin/Release/net8.0/publish",
+      "publish_dir": "bin/Release/net9.0/publish",
       "user_bin": "$HOME/.local/bin",
       "desktop_dir": "$HOME/.local/share/applications"
     },
