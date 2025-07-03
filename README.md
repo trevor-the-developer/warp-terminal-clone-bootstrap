@@ -1,6 +1,12 @@
 # 🚀 Wurp Terminal Bootstrap
 
-A comprehensive **modular bootstrap system** that generates complete AI-powered terminal applications built with .NET 8. Features a clean, maintainable architecture with numbered modules for easy development and extension.
+A comprehensive **modular bootstrap system** that generates complete AI-powered terminal applications built with .NET 9. Features a clean, maintainable architecture with numbered modules for easy development and extension.
+
+**Latest Updates:**
+- ✅ Updated to .NET 9 for compatibility with Freelance-AI project
+- ✅ Fixed modular system warnings - no more "modules directory not found" messages
+- ✅ Added comprehensive test suite with 17 automated tests
+- ✅ Full integration testing for generated projects
 
 ## ⚡ Quick Start
 
@@ -54,7 +60,7 @@ The bootstrap script generates a complete project structure:
 ```
 your-project/
 ├── Program.cs                          # Main terminal application entry point
-├── WurpTerminal.csproj                 # .NET 8 project file
+├── WurpTerminal.csproj                 # .NET 9 project file
 ├── wurp-config.json                   # Centralised configuration
 ├── Core/                               # Modular C# architecture
 │   ├── WurpTerminalService.cs          # Main terminal service
@@ -163,7 +169,7 @@ docker ps                     # Container management
 
 | Requirement | Purpose | Installation |
 |-------------|---------|--------------|
-| **.NET 8 SDK** | Build and run C# application | [Download from Microsoft](https://dotnet.microsoft.com/download) |
+|| **.NET 9 SDK** | Build and run C# application | [Download from Microsoft](https://dotnet.microsoft.com/download) |
 | **jq** | JSON configuration processing | `sudo apt install jq` or `brew install jq` |
 | **curl** | AI service health checks | `sudo apt install curl` or `brew install curl` |
 | **bash/zsh** | Shell compatibility | Usually pre-installed |
@@ -196,6 +202,76 @@ lib/modules/60-management.sh   # Advanced project management
 
 ## 🧪 Testing & Debugging
 
+### Comprehensive Test Suite
+
+We provide a complete test script that validates all aspects of generated projects:
+
+```bash
+# Test the current project
+./test-wurp-terminal.sh
+
+# Test a specific project
+./test-wurp-terminal.sh /path/to/your-project
+
+# Test the example project we just created
+./test-wurp-terminal.sh ~/workspace/my-terminal
+```
+
+### Test Coverage (17 Automated Tests)
+
+The test script performs comprehensive validation:
+
+#### 🔧 **Build & Functionality Tests**
+1. **Help Command** - Validates script help system
+2. **Dependency Check** - Ensures all required tools are available
+3. **Build Application** - Tests .NET 9 compilation
+4. **Publish Application** - Validates optimized binary creation
+5. **Status Check** - Verifies installation status reporting
+
+#### 🚀 **Terminal Functionality Tests**
+6. **Version Command** - Tests terminal version display
+7. **Terminal Help** - Validates built-in help system
+8. **AI Explain Command** - Tests AI command explanation feature
+9. **AI Suggest Command** - Tests AI task suggestion feature
+10. **AI Debug Command** - Tests AI debugging assistance
+11. **Theme List Command** - Tests theme management listing
+12. **Theme Change Command** - Tests theme switching functionality
+
+#### 📁 **Structure & Configuration Tests**
+13. **Project Structure Validation** - Ensures all required files and directories exist
+14. **Configuration File Validation** - Validates JSON configuration syntax
+15. **Executable Permissions** - Checks script execution permissions
+16. **Published Binary Verification** - Confirms binary creation and location
+17. **Symlink Verification** - Tests global installation symlinks
+
+### Test Output Example
+```bash
+🚀 Wurp Terminal Clone - Test Suite
+==================================
+
+ℹ️  Testing project: /home/user/workspace/my-terminal
+
+🔍 Running Wurp Terminal Tests...
+
+🧪 Test 1: Help command
+✅ PASSED: Help command
+🧪 Test 2: Dependency check
+✅ PASSED: Dependency check
+...
+🧪 Test 17: Symlink verification
+✅ PASSED: Symlink verification
+
+═══════════════════════════════════════
+📊 Test Results Summary
+═══════════════════════════════════════
+
+ℹ️  Tests Run: 17
+✅ Tests Passed: 17
+✅ All tests passed successfully! 🎉
+
+✨ Wurp Terminal Clone is working correctly!
+```
+
 ### Debug Mode
 ```bash
 # See detailed module loading and execution
@@ -209,13 +285,16 @@ cd your-project
 ./scripts/wurp-terminal check    # Verify dependencies
 ./scripts/wurp-terminal build    # Test build process
 ./scripts/wurp-terminal status   # Show installation status
+
+# Run full test suite
+/path/to/bootstrap/test-wurp-terminal.sh ./
 ```
 
 ## 📚 Project Structure Details
 
 | Component | Purpose | Technology |
 |-----------|---------|------------|
-| **Program.cs** | Application entry point with async/await | C# 12, .NET 8 |
+|| **Program.cs** | Application entry point with async/await | C# 12, .NET 9 |
 | **Core/*.cs** | Modular service architecture | Clean Architecture pattern |
 | **wurp-config.json** | Centralised configuration | JSON with jq processing |
 | **scripts/wurp-terminal** | Build and deployment automation | Bash with error handling |
@@ -293,6 +372,6 @@ company-terminal --help
 
 ---
 
-**Built with ❤️ using .NET 8, C# 12, and Modular Bash Architecture**
+**Built with ❤️ using .NET 9, C# 12, and Modular Bash Architecture**
 
 *Transform your terminal experience with AI-powered assistance and modern development practices.*

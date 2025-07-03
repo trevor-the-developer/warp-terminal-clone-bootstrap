@@ -198,7 +198,7 @@ create_csproj_file() {
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>wurp-terminal</AssemblyName>
@@ -648,6 +648,57 @@ create_core_files() {
     print_status "success" "Core class files created"
 }
 
+# Create modules directory and basic module files
+create_modules() {
+    local modules_dir="scripts/lib/modules"
+    
+    print_status "wrench" "Creating modular system..."
+    
+    # Ensure modules directory exists
+    mkdir -p "$modules_dir"
+    
+    # Copy basic module templates from bootstrap
+    local bootstrap_modules_dir="$SCRIPT_DIR/scripts/lib/modules"
+    
+    if [ -d "$bootstrap_modules_dir" ]; then
+        cp "$bootstrap_modules_dir"/*.sh "$modules_dir/" 2>/dev/null || true
+        print_status "success" "Module templates copied"
+    else
+        # Create basic stub modules if bootstrap modules don't exist
+        cat > "$modules_dir/00-core.sh" << 'MODULE_EOF'
+#!/bin/bash
+# 00-core.sh
+# Core utilities for Wurp (Warp Terminal Clone)
+
+# Core utility functions will be loaded first
+print_status "info" "Core module loaded"
+MODULE_EOF
+
+        cat > "$modules_dir/10-project.sh" << 'MODULE_EOF'
+#!/bin/bash
+# 10-project.sh
+# Project management functions for Wurp (Warp Terminal Clone)
+
+# Project management functions
+print_status "info" "Project module loaded"
+MODULE_EOF
+
+        cat > "$modules_dir/20-files.sh" << 'MODULE_EOF'
+#!/bin/bash
+# 20-files.sh
+# File generation functions for Wurp (Warp Terminal Clone)
+
+# File generation functions
+print_status "info" "Files module loaded"
+MODULE_EOF
+        
+        print_status "success" "Module stubs created"
+    fi
+    
+    # Make modules executable
+    chmod +x "$modules_dir"/*.sh 2>/dev/null || true
+}
+
 # Create wurp-config.json
 create_wurp_config() {
     local filename=$(get_config '.project_structure.files.config')
@@ -844,8 +895,11 @@ publish_app() {
 run_app() {
     local binary_name="wurp-terminal"
     local search_paths=(
-        "bin/Release/net8.0/publish/$binary_name"
-        "bin/Release/net8.0/publish/$binary_name.dll"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name"
+        "bin/Release/net9.0/publish/$binary_name"
+        "bin/Release/net9.0/linux-x64/$binary_name"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
+        "bin/Release/net9.0/publish/$binary_name.dll"
     )
 
     for path in "${search_paths[@]}"; do

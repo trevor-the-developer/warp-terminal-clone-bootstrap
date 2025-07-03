@@ -3,6 +3,7 @@
     "directories": [
       "scripts",
       "scripts/lib",
+      "scripts/lib/modules",
       "Core"
     ],
     "files": {
