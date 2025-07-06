@@ -188,6 +188,59 @@ module_exists() {
 }
 
 # ========================================
+# BINARY LOCATION FUNCTIONS
+# ========================================
+
+# Get common binary search paths for .NET applications
+get_binary_search_paths() {
+    local binary_name=$(get_config '.project.binary_name')
+    binary_name="${binary_name:-wurp-terminal}"
+    
+    # Return array of potential binary locations
+    local search_paths=(
+        "bin/Release/net9.0/linux-x64/publish/$binary_name"
+        "bin/Release/net9.0/publish/$binary_name"
+        "bin/Release/net9.0/linux-x64/$binary_name"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
+        "bin/Release/net9.0/publish/$binary_name.dll"
+    )
+    
+    printf '%s\n' "${search_paths[@]}"
+}
+
+# Find actual binary location by searching common paths
+find_binary() {
+    local search_paths
+    readarray -t search_paths < <(get_binary_search_paths)
+    
+    for path in "${search_paths[@]}"; do
+        if [ -f "${PROJECT_ROOT:-}/$path" ]; then
+            echo "${PROJECT_ROOT:-}/$path"
+            return 0
+        fi
+    done
+    
+    return 1
+}
+
+# Check if binary exists (returns 0 if exists, 1 if not)
+check_binary_exists() {
+    local binary_path
+    binary_path=$(find_binary) 2>/dev/null
+    [ -n "$binary_path" ]
+}
+
+# Get relative path of binary from project root
+get_binary_relative_path() {
+    local binary_path
+    if binary_path=$(find_binary); then
+        echo "${binary_path#${PROJECT_ROOT:-}/}"
+        return 0
+    fi
+    return 1
+}
+
+# ========================================
 # INITIALIZATION
 # ========================================
 
@@ -217,3 +270,4 @@ export -f print_color print_status debug_print
 export -f validate_core_dependencies validate_config
 export -f is_debug_mode safe_cd safe_mkdir
 export -f get_modules_dir list_modules module_exists
+export -f get_binary_search_paths find_binary check_binary_exists get_binary_relative_path

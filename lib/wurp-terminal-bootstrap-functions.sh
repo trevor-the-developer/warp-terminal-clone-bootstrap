@@ -848,6 +848,32 @@ print_status() {
     esac
 }
 
+# Simple binary search for generated projects
+get_simple_binary_paths() {
+    local binary_name="wurp-terminal"
+    local search_paths=(
+        "bin/Release/net9.0/linux-x64/publish/$binary_name"
+        "bin/Release/net9.0/publish/$binary_name"
+        "bin/Release/net9.0/linux-x64/$binary_name"
+        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
+        "bin/Release/net9.0/publish/$binary_name.dll"
+    )
+    printf '%s\n' "${search_paths[@]}"
+}
+
+find_simple_binary() {
+    local search_paths
+    readarray -t search_paths < <(get_simple_binary_paths)
+    
+    for path in "${search_paths[@]}"; do
+        if [ -f "$PROJECT_ROOT/$path" ]; then
+            echo "$PROJECT_ROOT/$path"
+            return 0
+        fi
+    done
+    return 1
+}
+
 check_dependencies() {
     print_status "working" "Checking dependencies..."
     command -v dotnet >/dev/null 2>&1 || { print_status "error" "dotnet not found"; return 1; }
@@ -866,22 +892,29 @@ publish_app() {
 }
 
 run_app() {
-    local binary_name="wurp-terminal"
-    for path in "bin/Release/net9.0/linux-x64/publish/$binary_name" "bin/Release/net9.0/publish/$binary_name.dll"; do
-        if [ -f "$PROJECT_ROOT/$path" ]; then
-            if [[ "$path" == *.dll ]]; then
-                exec dotnet "$PROJECT_ROOT/$path" "$@"
-            else
-                exec "$PROJECT_ROOT/$path" "$@"
-            fi
-        fi
-    done
-    print_status "error" "Application not found. Please build first."
+    local actual_binary
+    if ! actual_binary=$(find_simple_binary); then
+        print_status "error" "Application not found. Please build first."
+        return 1
+    fi
+    
+    if [[ "$actual_binary" == *.dll ]]; then
+        exec dotnet "$actual_binary" "$@"
+    else
+        exec "$actual_binary" "$@"
+    fi
 }
 
 show_status() {
     echo "🚀 Wurp Terminal Status"
-    [ -f "bin/Release/net9.0/linux-x64/publish/wurp-terminal" ] && print_status "success" "Application built" || print_status "error" "Application not built"
+    
+    local actual_binary
+    if actual_binary=$(find_simple_binary); then
+        local relative_path="${actual_binary#${PROJECT_ROOT:-}/}"
+        print_status "success" "Application built at: $relative_path"
+    else
+        print_status "error" "Application not built"
+    fi
 }
 
 show_help() {

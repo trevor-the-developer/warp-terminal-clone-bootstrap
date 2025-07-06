@@ -943,11 +943,11 @@ load_modules() {
 }
 
 # ========================================
-# LEGACY COMPATIBILITY FUNCTIONS
+# FILE GENERATION MODULE
 # ========================================
-# These provide basic functionality when modules aren't available
+# This module contains all file generation functions
 
-# Basic config functions
+print_status "info" "Files module loaded"
 get_config() {
     local path=$1
     echo "$CONFIG" | jq -r "$path // empty" 2>/dev/null
@@ -1065,23 +1065,14 @@ publish_app() {
         local user_bin_path=$(get_config '.paths.user_bin')
         local user_bin=$(expand_path "${user_bin_path:-$HOME/.local/bin}")
 
-        # Find the actual binary location
-        local actual_binary=""
-        local search_paths=(
-            "bin/Release/net9.0/linux-x64/publish/$binary_name"
-            "bin/Release/net9.0/publish/$binary_name"
-            "bin/Release/net9.0/linux-x64/$binary_name"
-            "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
-            "bin/Release/net9.0/publish/$binary_name.dll"
-        )
-
-        for path in "${search_paths[@]}"; do
-            if [ -f "$PROJECT_ROOT/$path" ]; then
-                actual_binary="$PROJECT_ROOT/$path"
-                print_status "info" "Found binary at: $path"
-                break
+        # Find the actual binary location using common function
+        local actual_binary
+        if actual_binary=$(find_binary); then
+            local relative_path
+            if relative_path=$(get_binary_relative_path); then
+                print_status "info" "Found binary at: $relative_path"
             fi
-        done
+        fi
 
         if [ -z "$actual_binary" ]; then
             print_status "error" "Published binary not found"
@@ -1121,35 +1112,18 @@ WRAPPER_EOF
 
 # Basic run function
 run_app() {
-    local binary_name=$(get_config '.project.binary_name')
-    binary_name="${binary_name:-wurp-terminal}"
-
-    # Try to find the published binary
-    local actual_binary=""
-    local search_paths=(
-        "bin/Release/net9.0/linux-x64/publish/$binary_name"
-        "bin/Release/net9.0/publish/$binary_name"
-        "bin/Release/net9.0/linux-x64/$binary_name"
-        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
-        "bin/Release/net9.0/publish/$binary_name.dll"
-    )
-
-    for path in "${search_paths[@]}"; do
-        if [ -f "$PROJECT_ROOT/$path" ]; then
-            actual_binary="$PROJECT_ROOT/$path"
-            break
-        fi
-    done
-
-    if [ -n "$actual_binary" ]; then
-        if [[ "$actual_binary" == *.dll ]]; then
-            exec dotnet "$actual_binary" "$@"
-        else
-            exec "$actual_binary" "$@"
-        fi
-    else
+    # Try to find the published binary using common function
+    local actual_binary
+    if ! actual_binary=$(find_binary); then
         print_status "error" "Application not found. Please build first."
         return 1
+    fi
+
+    # Execute the binary (it's guaranteed to exist if we get here)
+    if [[ "$actual_binary" == *.dll ]]; then
+        exec dotnet "$actual_binary" "$@"
+    else
+        exec "$actual_binary" "$@"
     fi
 }
 
@@ -1164,26 +1138,13 @@ show_status() {
     local binary_name=$(get_config '.project.binary_name')
     binary_name="${binary_name:-wurp-terminal}"
 
-    # Check if application is built
-    local actual_binary=""
-    local search_paths=(
-        "bin/Release/net9.0/linux-x64/publish/$binary_name"
-        "bin/Release/net9.0/publish/$binary_name"
-        "bin/Release/net9.0/linux-x64/$binary_name"
-        "bin/Release/net9.0/linux-x64/publish/$binary_name.dll"
-        "bin/Release/net9.0/publish/$binary_name.dll"
-    )
-
-    for path in "${search_paths[@]}"; do
-        if [ -f "$PROJECT_ROOT/$path" ]; then
-            actual_binary="$PROJECT_ROOT/$path"
-            break
-        fi
-    done
-
-    if [ -n "$actual_binary" ]; then
+    # Check if application is built using common function
+    if check_binary_exists; then
         print_status "success" "Application built and published"
-        echo -e "   Location: $actual_binary"
+        local relative_path
+        if relative_path=$(get_binary_relative_path); then
+            echo -e "   Location: $relative_path"
+        fi
     else
         print_status "error" "Application not built"
     fi

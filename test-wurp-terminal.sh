@@ -242,8 +242,12 @@ fi
 print_test "Test $((TESTS_RUN + 1)): Published binary verification"
 ((TESTS_RUN++))
 
+# Use the same search paths as the main functions
 binary_paths=(
     "bin/Release/net9.0/linux-x64/publish/wurp-terminal"
+    "bin/Release/net9.0/publish/wurp-terminal"
+    "bin/Release/net9.0/linux-x64/wurp-terminal"
+    "bin/Release/net9.0/linux-x64/publish/wurp-terminal.dll"
     "bin/Release/net9.0/publish/wurp-terminal.dll"
 )
 
